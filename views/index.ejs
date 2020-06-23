@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -45,7 +44,8 @@
     <div class="grid">
       <div class="header">
         <div class="MenuHeader">
-
+          <h1>#general</h1>
+          <button onclick="createServer()">CREATE SERVER</button>
         </div>
         <div class="ChatHeader">
 
@@ -65,10 +65,11 @@
         </div>
       </div>
       <script>
-              var socket = io.connect('http://localhost:1337');
               var group_chat = prompt('What group chat would you like to join?');
+              var socket = io.connect('http://localhost:1337');
+
               var username = prompt('Please tell me your name');
-              if (username.length < 4 || username.length > 19) {
+              while (username.length < 4 || username.length > 19) {
                 var username = prompt('Please tell me your name (MUST BE BETWEEN 4 AND 19 CHARACTERS)');
               }
               $('form').submit(function(e){
@@ -100,6 +101,8 @@
                 }
               });
 
+              socket.on('failure_chat_create')
+
               // socket.on('typing_noti', function(user,chat) {
               //   document.getElementById('typerX').innerHTML = 'Typing'
               // })
@@ -107,6 +110,11 @@
               // function isTyping() {
               //     socket.emit('is_typing', group_chat);
               // }
+
+                function createServer() {
+                    var new_name = prompt("What should the server name be?");
+                    socket.emit('create', new_name);
+                }
 
                 socket.emit('connector', { username: username, chat: group_chat });
       </script>
